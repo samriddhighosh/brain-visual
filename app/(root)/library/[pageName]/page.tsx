@@ -1,7 +1,5 @@
 import Navbar from '@/components/navbar'
 import React from 'react'
-import { notFound } from 'next/navigation';
-import { papers } from '@/researchConfig';
 import { ArrowLeftIcon } from 'lucide-react';
 import { getArticlesData } from '@/articles';
 import Link from 'next/link';

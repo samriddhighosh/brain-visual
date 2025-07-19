@@ -35,7 +35,7 @@ function DisplayComponent({ sliderValue }: { sliderValue: number }) {
         <div>
             <h2 className='text-[24px] font-bold'>1. Preclinical Stage (No outward symptoms)</h2>
             <p>
-                In the earliest stage of Alzheimer's, changes begin in the brain long before any symptoms appear.
+                In the earliest stage of Alzheimer&apos;s, changes begin in the brain long before any symptoms appear.
                  Amyloid-beta plaques start to form between neurons, and tau proteins begin tangling inside them.
                 These biological processes silently disrupt communication between brain cells, particularly in the
                  hippocampus and entorhinal cortex, which are essential for memory and navigation. Despite these changes, individuals appear cognitively normal and function independently. This stage can last for years, even decades.

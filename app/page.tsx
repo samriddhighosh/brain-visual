@@ -1,6 +1,4 @@
 import Navbar from "@/components/navbar";
-import { Slider } from "@/components/ui/slider";
-import Link from "next/link";
 
 export default function Home() {
   return (
@@ -12,7 +10,7 @@ export default function Home() {
       <div className="w-full items-center ml-64 mt-8 mr-20 mb-20">
         <div>
           <h1 className="text-[28px] font-extrabold">Hello, User </h1>
-          <p>Here's the description</p>
+          <p>Here&apos;s the description</p>
           <div className="flex gap-6 my-6">
             <div className="bg-white rounded-2xl px-8 py-6 w-1/2">
               <p className="font-medium text-indigo-400 to-blue-950">Total Lessons</p>
@@ -36,22 +34,22 @@ export default function Home() {
         <div className="flex gap-6 h-1/2 mb-10 w-full">
           <div className="w-1/4 bg-white rounded-2xl px-8 py-8">
             <h2 className="text-[18px] font-bold border-b-2 border-b-gray-300">Booking </h2>
-            <p>Here's the description</p>
+            <p>Here&apos;s the description</p>
           </div>
           <div className="w-3/4 flex flex-col gap-6">
             <div className="flex gap-6 w-full">
               <div className="w-2/3 bg-white rounded-2xl px-8 py-6">
                 <h2 className="text-[18px] font-bold border-b-2 border-b-gray-200">Self Growth </h2>
-                <p>Here's the description</p>
+                <p>Here&apos;s the description</p>
               </div>
               <div className="w-1/3 bg-white rounded-2xl px-8 py-6">
                 <h2 className="text-[18px] font-bold border-b-2 border-b-gray-200">Progress </h2>
-                <p>Here's the description</p>
+                <p>Here&apos;s the description</p>
               </div>
             </div>
             <div className=" bg-white rounded-2xl px-8 py-6">
                 
-                <p>Here's the description</p>
+                <p>Here&apos;s the description</p>
             </div>
           </div>
         </div>
