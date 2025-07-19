@@ -3,8 +3,14 @@ import React from 'react'
 import { notFound } from 'next/navigation';
 import { models } from '@/modelsConfig';
 
+interface PageProps {
+  params: {
+    appName: string
+  }
+}
 
-const page = ({params}) => {
+
+const page = ({params}:PageProps) => {
   
   const model = models.find((m) => m.id === params.appName);
 
