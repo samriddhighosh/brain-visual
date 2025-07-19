@@ -3,7 +3,6 @@ import React from 'react'
 import { ArrowLeftIcon } from 'lucide-react';
 import { getArticlesData } from '@/articles';
 import Link from 'next/link';
-import { Metadata } from 'next'
 
 interface PageProps {
   params: {
