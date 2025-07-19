@@ -3,8 +3,15 @@ import React from 'react'
 import { ArrowLeftIcon } from 'lucide-react';
 import { getArticlesData } from '@/articles';
 import Link from 'next/link';
+import { Metadata } from 'next'
 
-const page = async({params}: {params:{pageName:string}}) => {
+interface PageProps {
+  params: {
+    pageName: string
+  }
+}
+
+const page = async ({ params }: PageProps) => {
   const articleData = await getArticlesData(params.pageName)
 
   // const paper = papers.find((p) => p.id === params.pageName);
