@@ -3,7 +3,6 @@ import { Chart } from "@/components/chart";
 import { DataTableDemo } from "@/components/DataTable";
 import Navbar from "@/components/navbar";
 import { Progress } from "@/components/ui/progress";
-import { Table } from "@/components/ui/table";
 import { Grid2X2Check, BookOpenText, ChartColumnBig, TriangleAlert } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"

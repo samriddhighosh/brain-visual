@@ -4,7 +4,6 @@ import React from 'react'
 import { models } from '@/modelsConfig';
 import { Brain, Search } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 
 const Apps = () => {
   return (
