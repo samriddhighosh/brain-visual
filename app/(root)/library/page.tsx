@@ -11,7 +11,7 @@ const page = () => {
 
     <div className="flex max-w-full bg-[#F3F7FF]">
       <Navbar/>
-      <div className='flex-col flex w-4/5 pt-8 px-6'>
+      <div className='flex-col flex w-4/5 pt-8 px-8'>
         {articles !== null && 
           Object.keys(articles).map((article)=>(
             <ArticleItemList

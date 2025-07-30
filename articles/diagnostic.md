@@ -1,7 +1,9 @@
 ---
-title: "the art of the side hustle"
-category: "business"
-date: "02-02-2023"
+title: "Early detection of Alzheimer’s etter than"
+description: "In early AD and mild cognitive impairment (MCI), diffusion parameters reveal consistent ..."
+author: "Mahmoud Hisham"
+category: "Alzheimers"
+date: "06-20-2025"
 ---
 
 **Can an AI tool improve the early detection of Alzheimer’s better than traditional assessments like the MMSE or MoCA?**

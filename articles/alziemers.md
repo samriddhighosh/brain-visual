@@ -1,7 +1,9 @@
 ---
-title: "the art of the side hustle"
-category: "business"
-date: "02-02-2023"
+title: "Evaluating Alzheimer’s Models on Imbalanced"
+description: "In early AD and mild cognitive impairment (MCI), diffusion parameters reveal consistent ..."
+author: "Thanusi Logathas"
+category: "Alzheimers"
+date: "06-25-2025"
 ---
 
 **What are the Best Validation Strategies for Evaluating Alzheimer’s Models on Imbalanced and Longitudinal Datasets?**  

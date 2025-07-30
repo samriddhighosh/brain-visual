@@ -1,13 +1,15 @@
 ---
-title: "the art of the hustle"
-category: "business"
-date: "02-02-2023"
+title: "Predictive Algorithms in Early AD Detection*"
+description: "In early AD and mild cognitive impairment (MCI), diffusion parameters reveal consistent ..."
+author: "Allen Du"
+category: "Alzheimers"
+date: "06-20-2025"
 ---
 
-**The Potential of ML/Predictive Algorithms in Early AD Detection**  
-Allen Du
+**The Potential of ML/Predictive Algorithms in Early AD Detection**
+_Allen Du_
 
-_Research converges on the finding that certain white matter tracts are particularly vulnerable to early AD pathology. Central among these are the parahippocampal cingulum bundle, the posterior thalamic radiation, and the forceps major. The parahippocampal cingulum serves as a pivotal conduit connecting the hippocampus (the epicentre of memory formation and one of the first regions involved in AD) to many places within the cortical region, facilitating episodic memory processing/consolidation. Disruption in this tract is strongly associated with memory deficits characteristic of clinical AD stages. Similarly, the posterior thalamic radiation connects the caudal thalamus to parietal and occipital cortices (regions implicated in sensory integration and visuospatial processing), which, in AD subtypes, often deteriorate. Interhemispheric communication between occipital lobes is enabled by the forceps major, which plays a role in coordinating complex visuospatial and attentional networks. These tracts collectively reflect a posterior-to-anterior pattern of degradation, consistent with Braak staging, where white matter integrity loss aligns with the spatial progression of tau pathology and other AD hallmarks, noting their high likelihood of success as early disease indicators._
+Research converges on the finding that certain white matter tracts are particularly vulnerable to early AD pathology. Central among these are the parahippocampal cingulum bundle, the posterior thalamic radiation, and the forceps major. The parahippocampal cingulum serves as a pivotal conduit connecting the hippocampus (the epicentre of memory formation and one of the first regions involved in AD) to many places within the cortical region, facilitating episodic memory processing/consolidation. Disruption in this tract is strongly associated with memory deficits characteristic of clinical AD stages. Similarly, the posterior thalamic radiation connects the caudal thalamus to parietal and occipital cortices (regions implicated in sensory integration and visuospatial processing), which, in AD subtypes, often deteriorate. Interhemispheric communication between occipital lobes is enabled by the forceps major, which plays a role in coordinating complex visuospatial and attentional networks. These tracts collectively reflect a posterior-to-anterior pattern of degradation, consistent with Braak staging, where white matter integrity loss aligns with the spatial progression of tau pathology and other AD hallmarks, noting their high likelihood of success as early disease indicators.
 
 **Introduction**
 
