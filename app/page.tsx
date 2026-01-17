@@ -6,11 +6,19 @@ import { Progress } from "@/components/ui/progress";
 import { Grid2X2Check, BookOpenText, ChartColumnBig, TriangleAlert } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const DonutChart = dynamic(() => import('@/components/DonutChart'), { ssr: false })
 
 
 export default function Home() {
+  
+  const { user, isLoaded } = useUser();
+
+  if (!isLoaded) {
+    return null;
+  }
+
   return (
     <div className="flex bg-[#F3F7FF] min-h-screen">
       <div className="top-0 left-0 z-50 fixed h-full">
@@ -26,7 +34,9 @@ export default function Home() {
         </AlertDescription>
       </Alert>
         <div>
-          <h1 className="text-[28px] font-extrabold pt-4">Hello, User </h1>
+          <h1 className="text-[28px] font-extrabold pt-4">
+            Hello, {user?.firstName ?? "there"}
+          </h1>
           <p>You are a beta tester</p>
           <div className="grid grid-cols-1 lg:grid-cols-3 w-full gap-6 my-10">
             <div className="bg-[#FFDDCC] rounded-2xl px-8 py-8 text-white shadow-2xs shadow-orange-300">
