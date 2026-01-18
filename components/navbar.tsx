@@ -1,7 +1,9 @@
+"use client";
 
 import Link from 'next/link'
 import React from 'react'
 import { LayoutDashboard, BrainCircuit, BookOpenText, Puzzle, GraduationCap } from 'lucide-react'
+import { UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   return (
@@ -26,8 +28,11 @@ const Navbar = () => {
         <GraduationCap/>
         <Link href="/quiz" className='text-[15px] font-medium place-self-center-safe'>Quiz</Link>
       </div>
-      
+      <div className="px-4">
+        <UserButton afterSignOutUrl="/sign-in" />
       </div>
+
+    </div>
   )
 }
 
