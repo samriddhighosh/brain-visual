@@ -41,6 +41,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-neuravia-dark: #0B0E14;
+  --color-neuravia-purple: #7C3AED;
+  --color-neuravia-text-muted: #94A3B8;
+  --color-neuravia-border: #1E293B;
 }
 
 :root {
@@ -116,15 +120,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
-@layer utilities{
+@layer utilities {
 
-  .article{
-    @apply flex flex-col gap-3 
+  .article {
+    @apply flex flex-col gap-3
   }
- 
+
 }

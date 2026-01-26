@@ -2,7 +2,7 @@ import fs from "fs"
 import matter from "gray-matter"
 import path from "path"
 import moment from "moment"
-import {remark} from "remark"
+import { remark } from "remark"
 import html from 'remark-html'
 
 import type { ArticleItem } from "./types"
@@ -12,7 +12,7 @@ const articlesDirectory = path.join(process.cwd(), "articles")
 const getSortedArtciles = (): ArticleItem[] => {
     const fileNames = fs.readdirSync(articlesDirectory)
 
-    const allAriclesData = fileNames.map((fileName)=> {
+    const allAriclesData = fileNames.map((fileName) => {
         const id = fileName.replace(/\.md$/, "")
 
         const fullPath = path.join(articlesDirectory, fileName)
@@ -20,16 +20,16 @@ const getSortedArtciles = (): ArticleItem[] => {
 
         const matterResults = matter(fileContents)
 
-        return{
+        return {
             id,
-            title:matterResults.data.title,
+            title: matterResults.data.title,
             date: matterResults.data.data,
             category: matterResults.data.category,
             author: matterResults.data.author,
             description: matterResults.data.description
         }
     })
-    return allAriclesData.sort((a,b)=>{
+    return allAriclesData.sort((a, b) => {
         const format = "DD-MM-YY"
         const dateOne = moment(a.date, format)
         const dateTwo = moment(b.date, format)
@@ -41,14 +41,14 @@ const getSortedArtciles = (): ArticleItem[] => {
         } else {
             return 0
         }
-    }) 
+    })
 }
 
 export const getCategorisedArticles = (): Record<string, ArticleItem[]> => {
     const sortedArticles = getSortedArtciles()
     const catetorisedArticles: Record<string, ArticleItem[]> = {}
-    
-    sortedArticles.forEach((article)=>{
+
+    sortedArticles.forEach((article) => {
         if (!catetorisedArticles[article.category]) {
             catetorisedArticles[article.category] = []
         }
@@ -57,7 +57,7 @@ export const getCategorisedArticles = (): Record<string, ArticleItem[]> => {
     return catetorisedArticles
 }
 
-export const getArticlesData = async(id:string) => {
+export const getArticlesData = async (id: string) => {
     const fullPath = path.join(articlesDirectory, `${id}.md`)
 
     const fileContents = fs.readFileSync(fullPath, "utf-8")
@@ -71,7 +71,7 @@ export const getArticlesData = async(id:string) => {
     return {
         id,
         contentHtml,
-        tutle:matterResult.data.title,
+        title: matterResult.data.title,
         description: matterResult.data.description,
         author: matterResult.data.author,
         category: matterResult.data.category,
