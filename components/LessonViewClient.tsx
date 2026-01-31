@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import LessonHeader from '@/components/LessonHeader';
 import LessonSidebar from '@/components/LessonSidebar';
 import LessonContent from '@/components/LessonContent';
 import LessonFooter from '@/components/LessonFooter';
+import { useUser } from "@clerk/nextjs";
+import { logUserEvent, updateTopicKnowledge } from "@/lib/supabase";
 
 interface LessonViewClientProps {
     initialData: {
@@ -17,6 +20,16 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
     const [progress, setProgress] = useState(0);
     const [activeSectionId, setActiveSectionId] = useState("");
     const [sections, setSections] = useState<any[]>([]);
+
+    const { user } = useUser();
+    const lastSavedProgress = useRef(0);
+    const hasLoggedCompletion = useRef(false);
+
+    useEffect(() => {
+        if (user && initialData.pageName) {
+            logUserEvent(user.id, `lesson_started: ${initialData.pageName}`);
+        }
+    }, [user, initialData.pageName]);
 
     useEffect(() => {
         // Extract sections from HTML content on the client
@@ -41,11 +54,11 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
         setSections(extractedSections);
     }, [initialData.contentHtml]);
 
-    const handleProgressUpdate = (overallProgress: number, currentSectionId: string) => {
+    const handleProgressUpdate = useCallback((overallProgress: number, currentSectionId: string) => {
         setProgress(overallProgress);
         setActiveSectionId(currentSectionId);
 
-        // Update active state in sections
+        // Update active state in sections locally
         setSections(prev => prev.map(section => ({
             ...section,
             progress: overallProgress,
@@ -56,7 +69,18 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
                 completed: false
             }))
         })));
-    };
+
+        // Sync with Supabase (Throttled: only if progress jumped by 5% or reached 100%)
+        if (user && (Math.abs(overallProgress - lastSavedProgress.current) > 5 || overallProgress > 98)) {
+            updateTopicKnowledge(user.id, initialData.pageName, Math.round(overallProgress));
+            lastSavedProgress.current = overallProgress;
+
+            if (overallProgress > 95 && !hasLoggedCompletion.current) {
+                logUserEvent(user.id, `lesson_completed: ${initialData.pageName}`);
+                hasLoggedCompletion.current = true;
+            }
+        }
+    }, [user, initialData.pageName]);
 
     return (
         <div className="flex flex-1 relative">
