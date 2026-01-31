@@ -18,6 +18,7 @@
     "@remixicon/react": "^4.6.0",
     "@splinetool/react-spline": "^4.0.0",
     "@splinetool/runtime": "^1.10.2",
+    "@supabase/supabase-js": "^2.93.3",
     "@tanstack/react-table": "^8.21.3",
     "apexcharts": "^5.3.0",
     "class-variance-authority": "^0.7.1",
