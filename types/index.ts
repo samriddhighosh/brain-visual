@@ -1,8 +1,9 @@
 export type ArticleItem = {
-    id:string,
+    id: string,
     title: string,
-    date:string, 
-    category:string,
+    date: string,
+    category: string,
     author: string,
     description: string,
+    headings?: string[],
 }

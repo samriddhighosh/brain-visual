@@ -6,7 +6,7 @@ import LessonSidebar from '@/components/LessonSidebar';
 import LessonContent from '@/components/LessonContent';
 import LessonFooter from '@/components/LessonFooter';
 import { useUser } from "@clerk/nextjs";
-import { logUserEvent, updateTopicKnowledge } from "@/lib/supabase";
+import { logUserEvent, updateTopicKnowledge, initializeLessonProgress, logLessonProgress } from "@/lib/supabase";
 
 interface LessonViewClientProps {
     initialData: {
@@ -23,13 +23,24 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
 
     const { user } = useUser();
     const lastSavedProgress = useRef(0);
+    const lastSavedSection = useRef("");
     const hasLoggedCompletion = useRef(false);
+    const sectionStartTime = useRef<Record<string, number>>({});
 
     useEffect(() => {
         if (user && initialData.pageName) {
             logUserEvent(user.id, `lesson_started: ${initialData.pageName}`);
+
+            // Initialize lesson structure in DB
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(initialData.contentHtml, 'text/html');
+            const headers = Array.from(doc.querySelectorAll('h2, h3')).map(h => h.textContent || "");
+
+            if (headers.length > 0) {
+                initializeLessonProgress(user.id, initialData.pageName, headers);
+            }
         }
-    }, [user, initialData.pageName]);
+    }, [user, initialData.pageName, initialData.contentHtml]);
 
     useEffect(() => {
         // Extract sections from HTML content on the client
@@ -80,7 +91,57 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
                 hasLoggedCompletion.current = true;
             }
         }
-    }, [user, initialData.pageName]);
+
+        // Log section-specific progress
+        if (user && currentSectionId && currentSectionId !== lastSavedSection.current) {
+            const now = Date.now();
+
+            // If we're leaving a section, calculate time spent
+            if (lastSavedSection.current && sectionStartTime.current[lastSavedSection.current]) {
+                const timeSpent = Math.floor((now - sectionStartTime.current[lastSavedSection.current]) / 1000);
+
+                // Find the display title for the section
+                const sectionTitle = sections[0]?.items?.find((item: any) => item.id === lastSavedSection.current)?.title || lastSavedSection.current;
+
+                logLessonProgress(
+                    user.id,
+                    initialData.pageName,
+                    sectionTitle,
+                    0.8,
+                    "completed",
+                    timeSpent,
+                    null,
+                    0.7,
+                    1
+                );
+            }
+
+            lastSavedSection.current = currentSectionId;
+            sectionStartTime.current[currentSectionId] = now;
+        }
+    }, [user, initialData.pageName, sections]);
+
+    useEffect(() => {
+        return () => {
+            if (user && lastSavedSection.current && sectionStartTime.current[lastSavedSection.current]) {
+                const now = Date.now();
+                const timeSpent = Math.floor((now - sectionStartTime.current[lastSavedSection.current]) / 1000);
+                const sectionTitle = sections[0]?.items?.find((item: any) => item.id === lastSavedSection.current)?.title || lastSavedSection.current;
+
+                logLessonProgress(
+                    user.id,
+                    initialData.pageName,
+                    sectionTitle,
+                    0.9,
+                    "completed",
+                    timeSpent,
+                    null,
+                    0.8,
+                    1
+                );
+            }
+        };
+    }, [user, initialData.pageName, sections]);
 
     return (
         <div className="flex flex-1 relative">

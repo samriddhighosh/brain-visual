@@ -20,13 +20,20 @@ const getSortedArtciles = (): ArticleItem[] => {
 
         const matterResults = matter(fileContents)
 
+        const headings = matterResults.content.split('\n')
+            .map(line => line.trim())
+            .filter(line => /^#+\s/.test(line) || /^\*\*.+\*\*$/.test(line))
+            .map(line => line.replace(/^#+\s*/, '').replace(/^\*\*|\*\*$/g, '').replace(/^_|_$/g, '').trim())
+            .filter(heading => heading.length > 0);
+
         return {
             id,
             title: matterResults.data.title,
-            date: matterResults.data.data,
+            date: matterResults.data.date || matterResults.data.data,
             category: matterResults.data.category,
             author: matterResults.data.author,
-            description: matterResults.data.description
+            description: matterResults.data.description,
+            headings
         }
     })
     return allAriclesData.sort((a, b) => {
@@ -64,6 +71,12 @@ export const getArticlesData = async (id: string) => {
 
     const matterResult = matter(fileContents)
 
+    const headings = matterResult.content.split('\n')
+        .map(line => line.trim())
+        .filter(line => /^#+\s/.test(line) || /^\*\*.+\*\*$/.test(line))
+        .map(line => line.replace(/^#+\s*/, '').replace(/^\*\*|\*\*$/g, '').replace(/^_|_$/g, '').trim())
+        .filter(heading => heading.length > 0);
+
     const processedContent = await remark().use(html).process(matterResult.content)
 
     const contentHtml = processedContent.toString()
@@ -71,6 +84,7 @@ export const getArticlesData = async (id: string) => {
     return {
         id,
         contentHtml,
+        headings,
         title: matterResult.data.title,
         description: matterResult.data.description,
         author: matterResult.data.author,
