@@ -51,6 +51,10 @@ const getSortedArtciles = (): ArticleItem[] => {
     })
 }
 
+export const getAllArticles = (): ArticleItem[] => {
+    return getSortedArtciles()
+}
+
 export const getCategorisedArticles = (): Record<string, ArticleItem[]> => {
     const sortedArticles = getSortedArtciles()
     const catetorisedArticles: Record<string, ArticleItem[]> = {}

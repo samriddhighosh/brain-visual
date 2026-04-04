@@ -140,3 +140,14 @@ export const getUserLessonProgress = async (userId: string, lessonId: string) =>
     }
     return data || [];
 };
+export const getAllUserLessonProgress = async (userId: string) => {
+    const { data, error } = await supabase.from('user_lesson_progress')
+        .select('*')
+        .eq('user_id', userId)
+        .order('last_accessed_at', { ascending: false });
+
+    if (error) {
+        console.error("Error fetching all lesson progress:", error.message);
+    }
+    return data || [];
+};

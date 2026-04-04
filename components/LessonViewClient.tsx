@@ -13,6 +13,7 @@ interface LessonViewClientProps {
         title: string;
         contentHtml: string;
         pageName: string;
+        nextLessonUrl?: string;
     };
 }
 
@@ -26,6 +27,8 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
     const lastSavedSection = useRef("");
     const hasLoggedCompletion = useRef(false);
     const sectionStartTime = useRef<Record<string, number>>({});
+    const mainScrollRef = useRef<HTMLDivElement>(null);
+    const sectionTitlesRef = useRef<Record<string, string>>({});
 
     useEffect(() => {
         if (user && initialData.pageName) {
@@ -38,6 +41,14 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
 
             if (headers.length > 0) {
                 initializeLessonProgress(user.id, initialData.pageName, headers);
+
+                // Also store titles in a ref for logging lookups
+                const titlesMap: Record<string, string> = {};
+                doc.querySelectorAll('h2, h3').forEach(h => {
+                    const id = h.textContent?.toLowerCase().replace(/[^\w]/g, '-') || "";
+                    titlesMap[id] = h.textContent || "";
+                });
+                sectionTitlesRef.current = titlesMap;
             }
         }
     }, [user, initialData.pageName, initialData.contentHtml]);
@@ -69,19 +80,22 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
         setProgress(overallProgress);
         setActiveSectionId(currentSectionId);
 
-        // Update active state in sections locally
-        setSections(prev => prev.map(section => ({
-            ...section,
-            progress: overallProgress,
-            completed: overallProgress > 95,
-            items: section.items?.map((item: any) => ({
-                ...item,
-                isActive: item.id === currentSectionId,
-                completed: false
-            }))
-        })));
+        setSections(prev => prev.map(section => {
+            const items = section.items || [];
+            const activeIndex = items.findIndex(item => item.id === currentSectionId);
 
-        // Sync with Supabase (Throttled: only if progress jumped by 5% or reached 100%)
+            return {
+                ...section,
+                progress: Math.max(section.progress, overallProgress),
+                completed: overallProgress > 95,
+                items: items.map((item, index) => ({
+                    ...item,
+                    isActive: item.id === currentSectionId,
+                    completed: item.completed || (activeIndex !== -1 && index < activeIndex) || overallProgress > 98
+                }))
+            };
+        }));
+
         if (user && (Math.abs(overallProgress - lastSavedProgress.current) > 5 || overallProgress > 98)) {
             updateTopicKnowledge(user.id, initialData.pageName, Math.round(overallProgress));
             lastSavedProgress.current = overallProgress;
@@ -100,8 +114,7 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
             if (lastSavedSection.current && sectionStartTime.current[lastSavedSection.current]) {
                 const timeSpent = Math.floor((now - sectionStartTime.current[lastSavedSection.current]) / 1000);
 
-                // Find the display title for the section
-                const sectionTitle = sections[0]?.items?.find((item: any) => item.id === lastSavedSection.current)?.title || lastSavedSection.current;
+                const sectionTitle = sectionTitlesRef.current[lastSavedSection.current] || lastSavedSection.current;
 
                 logLessonProgress(
                     user.id,
@@ -119,14 +132,14 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
             lastSavedSection.current = currentSectionId;
             sectionStartTime.current[currentSectionId] = now;
         }
-    }, [user, initialData.pageName, sections]);
+    }, [user, initialData.pageName]);
 
     useEffect(() => {
         return () => {
             if (user && lastSavedSection.current && sectionStartTime.current[lastSavedSection.current]) {
                 const now = Date.now();
                 const timeSpent = Math.floor((now - sectionStartTime.current[lastSavedSection.current]) / 1000);
-                const sectionTitle = sections[0]?.items?.find((item: any) => item.id === lastSavedSection.current)?.title || lastSavedSection.current;
+                const sectionTitle = sectionTitlesRef.current[lastSavedSection.current] || lastSavedSection.current;
 
                 logLessonProgress(
                     user.id,
@@ -141,21 +154,25 @@ const LessonViewClient = ({ initialData }: LessonViewClientProps) => {
                 );
             }
         };
-    }, [user, initialData.pageName, sections]);
+    }, [user, initialData.pageName]);
 
     return (
         <div className="flex flex-1 relative">
-            <LessonSidebar sections={sections} />
+            <LessonSidebar
+                sections={sections}
+                scrollContainerRef={mainScrollRef}
+                totalProgress={progress}
+            />
 
             <main className="flex-1 flex flex-col min-h-full">
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto" ref={mainScrollRef}>
                     <LessonContent
                         title={initialData.title}
                         id={initialData.pageName}
                         contentHtml={initialData.contentHtml}
                         onProgressUpdate={handleProgressUpdate}
                     />
-                    <LessonFooter />
+                    <LessonFooter nextLessonUrl={initialData.nextLessonUrl} />
                 </div>
             </main>
         </div>

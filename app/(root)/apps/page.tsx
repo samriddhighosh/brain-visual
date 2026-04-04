@@ -12,7 +12,7 @@ const Apps = () => {
       
       <div className='flex-col flex w-4/5 pt-8 px-6' >
         <div className='flex bg-gray-50 py-2 px-6 items-center rounded-2xl shadow-sm border-1 border-gray-200 hover:border-3 hover:border-gray-200 hover:outline-gray-300'>
-          <input type="email" placeholder="Start Searching..." className='text-[14px] outline-none bg-transparent flex-grow'  />
+          <input type="text" placeholder="Start Searching..." className='text-[14px] outline-none bg-transparent flex-grow'  />
           <Search className='place-self-end text-gray-500' size={20}/>
         </div>
         

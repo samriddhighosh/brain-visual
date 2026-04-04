@@ -6,7 +6,6 @@ import React from 'react'
 const page = () => {
   const articles = getCategorisedArticles()
 
-  console.log(articles)
   return (
 
     <div className="flex max-w-full bg-[#F3F7FF]">

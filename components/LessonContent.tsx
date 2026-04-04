@@ -14,29 +14,59 @@ const LessonContent = ({ title, id, contentHtml, onProgressUpdate }: LessonConte
     const contentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const scrollContainer = contentRef.current?.parentElement;
+        
         const handleScroll = () => {
             if (!contentRef.current) return;
 
+            // 1. Identify active section using relative positions
             const sections = contentRef.current.querySelectorAll('h2, h3');
-            const scrollPosition = window.scrollY + 100; // Offset for header
-
             let currentSectionId = "";
+            let bestOffset = -Infinity;
+
             sections.forEach((section) => {
-                const sectionTop = (section as HTMLElement).offsetTop;
-                if (scrollPosition >= sectionTop) {
-                    currentSectionId = section.id;
+                const rect = section.getBoundingClientRect();
+                // A section is "active" if its top is above the 150px mark
+                if (rect.top <= 150) {
+                    if (rect.top > bestOffset) {
+                        bestOffset = rect.top;
+                        currentSectionId = section.id;
+                    }
                 }
             });
 
-            // Calculate overall progress based on scroll position in the content area
-            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = (window.scrollY / totalHeight) * 100;
+            // 2. Calculate overall progress
+            let progress = 0;
+            if (scrollContainer && scrollContainer.scrollHeight > scrollContainer.clientHeight) {
+                // Container is scrolling
+                const totalHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+                progress = (scrollContainer.scrollTop / totalHeight) * 100;
+            } else {
+                // Window is scrolling (Fallback)
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+            }
 
-            onProgressUpdate(progress, currentSectionId);
+            // Cap progress at 100
+            const cappedProgress = Math.min(Math.max(progress, 0), 100);
+            onProgressUpdate(cappedProgress, currentSectionId);
         };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        // Listen to both for safety
+        window.addEventListener('scroll', handleScroll, true);
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', handleScroll);
+        }
+
+        // Initial trigger
+        setTimeout(handleScroll, 100);
+        
+        return () => {
+            window.removeEventListener('scroll', handleScroll, true);
+            if (scrollContainer) {
+                scrollContainer.removeEventListener('scroll', handleScroll);
+            }
+        };
     }, [onProgressUpdate]);
 
     // We need to inject IDs into the HTML for intersection observer to work

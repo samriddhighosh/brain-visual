@@ -24,20 +24,24 @@ interface Section {
 interface LessonSidebarProps {
     sections: Section[];
     totalProgress?: number;
+    scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-const LessonSidebar = ({ sections }: LessonSidebarProps) => {
+const LessonSidebar = ({ sections, scrollContainerRef, totalProgress }: LessonSidebarProps) => {
     return (
         <aside className="w-[320px] bg-white border-r border-gray-100 h-[calc(100vh-65px)] overflow-y-auto hidden lg:block sticky top-[65px]">
             <div className="p-6">
-                {/* Module Header */}
                 <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-6 flex gap-4 items-center">
                     <div className="bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm">
                         <Brain className="text-purple-600" size={24} />
                     </div>
-                    <div>
-                        <h3 className="text-gray-900 font-bold text-sm leading-tight">Computational Neuroscience</h3>
-                        <p className="text-gray-500 text-[11px] font-medium mt-0.5">Level 3: Advanced Topics</p>
+                    <div className="flex-1">
+                        <div className="flex justify-between items-center mb-1">
+                            <h3 className="text-gray-900 font-bold text-sm leading-tight">Memory & Alzheimer's</h3>
+                            <span className="text-[10px] font-bold text-purple-600">{Math.round(totalProgress || 0)}%</span>
+                        </div>
+                        <Progress value={totalProgress} className="h-1 bg-gray-100 [&>div]:bg-purple-600" />
+                        <p className="text-gray-500 text-[9px] font-medium mt-1">Foundations of Memory</p>
                     </div>
                 </div>
 
@@ -68,12 +72,11 @@ const LessonSidebar = ({ sections }: LessonSidebarProps) => {
                                         key={item.id}
                                         onClick={() => {
                                             const element = document.getElementById(item.id);
-                                            if (element) {
-                                                const offset = 80; // Account for sticky header
-                                                const elementPosition = element.getBoundingClientRect().top;
-                                                const offsetPosition = elementPosition + window.pageYOffset - offset;
-                                                window.scrollTo({
-                                                    top: offsetPosition,
+                                            if (element && scrollContainerRef?.current) {
+                                                const offset = 20; // Internal padding offset
+                                                const elementTop = element.offsetTop;
+                                                scrollContainerRef.current.scrollTo({
+                                                    top: elementTop - offset,
                                                     behavior: "smooth"
                                                 });
                                             }

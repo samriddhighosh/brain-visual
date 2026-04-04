@@ -1,6 +1,6 @@
 "use client"
 import { Chart } from "@/components/chart";
-import { DataTableDemo } from "@/components/DataTable";
+import { LearningDataTable } from "@/components/DataTable";
 import Navbar from "@/components/navbar";
 import { Progress } from "@/components/ui/progress";
 import { Grid2X2Check, BookOpenText, ChartColumnBig, TriangleAlert } from "lucide-react";
@@ -94,7 +94,7 @@ export default function Home() {
           <div>
             <h2 className="text-[20px] font-bold pb-4">Learning </h2>
             <div className=" bg-white rounded-2xl px-8 py-8">
-              <DataTableDemo />
+              <LearningDataTable />
             </div>
           </div>
           <div className="w-3/4 flex flex-col gap-6">
